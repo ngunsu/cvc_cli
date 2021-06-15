@@ -1,0 +1,79 @@
+import click
+import cv2
+import os
+import pathlib
+import numpy as np
+from glob import glob
+from os import system
+
+
+def get_list_of_images(stereo_root_path):
+    """ Reads stereo folder and returns a list of stereo images pairs.
+
+    Notes
+    -----
+
+    Stereo root path, must have the following structure
+
+    - stereo_root_path
+        - left
+            - frame_1.png
+            - ...
+            - frame_n.png
+        - right
+            - frame_1.png
+            - ...
+            - frame_n.png
+
+    Parameters
+    ----------
+    stereo_root_path: string
+        Root path of the stereo dataset.
+
+    Returns
+    -------
+    list
+        List of stero pairs paths
+
+    """
+    stereo_pairs = []
+    left_folder = os.path.join(stereo_root_path, 'left')
+    left_list = glob(f'{left_folder}/*.png')
+    left_list = sorted(left_list)
+    for left_im_path in left_list:
+        name = pathlib.Path(left_im_path).name
+        right_im_path = os.path.join(stereo_root_path, 'right', name)
+        if pathlib.Path(right_im_path).exists():
+            stereo_pairs.append((left_im_path, right_im_path))
+        else:
+            print(f'Missing pair {right_im_path}')
+    return stereo_pairs
+
+
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+@click.option('-p', '--pattern_type', help='checkboard', type=click.Choice(['checkboard']))
+@click.argument('stereo_root_path')
+def view_images(stereo_root_path, pattern_type):
+    """Show stereo images as a horizontal stacked image (downsampled)
+    """
+    print('Commands  n: next, q:quit')
+    stereo_pairs = get_list_of_images(stereo_root_path)
+    for left_path, right_path in stereo_pairs:
+        left_im = cv2.imread(left_path)
+        right_im = cv2.imread(right_path)
+        stereo_im = np.hstack((left_im, right_im))
+        cv2.imshow('stereo_pair', stereo_im)
+        key = cv2.waitKey(0)
+        if key == 'q':
+            quit()
+        elif key == 'n':
+            continue
+
+
+if __name__ == "__main__":
+    cli()
