@@ -1,10 +1,10 @@
-# cv-cli
+# CV-CLI 
 
 Image processing and computer vision CLI tools
 
 ---
 
-## cv-convert
+## cvc-convert 
 
 ### im2im
 
@@ -14,12 +14,12 @@ Converts the image format of one or multiples images
 
 ```bash
 # For example, convert img.jpg to img.png
-cv-convert im2im png img.jpg
+cvc-convert im2im ./data/samples/aero1.jpg png
 ```
 
 ```bash
 # For example, convert all the jpg images in /demo to png 
-cv-convert im2im png /demo/*.jpg 
+cvc-convert im2im ./data/samples/*.jpg png
 ```
 
 In both cases, original images are not deleted, and the output images are created in the same folder as the original
@@ -29,6 +29,7 @@ In both cases, original images are not deleted, and the output images are create
 Converts a group of images into a video using **ffmpeg**. The images must have a format, e.g., frame_%d.jpg
 
 ```bash
-# For example, convert the jpg images in ./demo to a mp4 video 
-cv-convert im2mp4 -s 1920x1080 -f 30  ./demo/frame_%d.jpg  output_video.mp4
+# For example, convert the jpg images in ./data/video/frame to a mp4 video 
+cvc-convert im2mp4 [--out_size 1920x1080] [--fps 30]  ./data/video/frame/demo%06d.jpg  output_video.mp4
 ```
+
