@@ -1,7 +1,11 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,linux,osx,windows,vim
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,linux,osx,windows,vim
-
+out/
+output/
+stereo_params.xml
+patterns.svg
+patterns.pdf
 ### Linux ###
 *~
 
